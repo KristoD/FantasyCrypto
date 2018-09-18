@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="img/favicon.ico" rel="shortcut icon">
+
+	<!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/platform.css">
+    <title>FantasyCrypto - Platform</title>
+</head>
+<body>
+
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+    
+    <!-- Header Section -->
+    <header id="signup-header-section" class="header-section clearfix">
+        <div class="container-fluid">
+            <a href="/" class="site-logo">
+                <img src="img/logo_transparent.png">
+            </a>
+            <div class="responsive-bar"><i class="fa fa-bars"></i></div>
+            <a href="" class="user"><i class="fa fa-user"></i></a>
+            <nav class="main-menu">
+                <ul class="menu-list">
+                    <li><a href="/platform">Platform</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- User Info -->
+
+    <div id="user-bar">
+        <nav class="navbar navbar-light">
+            <p>Hello, <%= user.first_name %></p>
+            <p>USD: $<%= (user.usd).toFixed(2) %></p>
+            <% if(user.coin.btc) { %>
+                <% var amount = 0; %>
+                <% var value = 0; %>
+                <% for(var i = 0; i < user.coin.btc.length; i++) { %>
+                    <% amount += user.coin.btc[i].amt; %>
+                    <% value += user.coin.btc[i].total; %>
+                <% } %>
+                <p>BTC: <%= amount %></p>
+                <p>BTC Value: $<%= value.toFixed(2) %></p>
+            <% } %>
+            <% if(user.coin.eth) { %>
+                <% var amount = 0; %>
+                <% var value = 0; %>
+                <% for(var i = 0; i < user.coin.eth.length; i++) { %>
+                    <% amount += user.coin.eth[i].amt; %>
+                    <% value += user.coin.eth[i].total; %>
+                <% } %>
+                <p>ETH: <%= amount %></p>
+                <p>ETH Value: $<%= value.toFixed(2) %></p>
+            <% } %>
+        </nav>
+    </div>
+
+    <!-- Error messages -->
+
+    <% if(purchaseError) { %>
+        <div class="container">
+            <div class="alert alert-danger alert-dismissible fade show text-center">
+                <%= purchaseError %>
+                <button type="button" id="popupclose" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- Coin Info -->
+    
+    <div id="coin-hero" class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-4 coin-sections">
+                        <div class="container coin-subsections">
+                            <h3>Coin</h3>
+                            <form method="POST" action="/coinpurchase">
+                                <select name="coindropdown">
+                                    <option value="<%= data.buy.btc.amount %>">Bitcoin</option>
+                                    <option value="<%= data.buy.eth.amount %>">Ethereum</option>
+                                    <option value="<%= data.buy.etc.amount %>">Ethereum Classic</option>
+                                    <option value="<%= data.buy.bch.amount %>">Bitcoin Cash</option>
+                                    <option value="<%= data.buy.ltc.amount %>">Litecoin</option>
+                                </select>
+                                <h3>Amount</h3>
+                                <div class="form-group">
+                                    <input id="coin-input" class="form-control" type="number" name="amount" step="0.000001">
+                                </div>
+                                <input id="coin-hidden" type="hidden" name="coin" value="Bitcoin">
+                                <button type="submit" class="btn btn-primary purchase-buttons">Buy</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-md-4 coin-sections text-center">
+                        <div class="container coin-subsections">
+                            <h4>BUYING</h4>
+                            <h3 class="coin-amt" style="display: inline-block;">0.00 </h3> <h3 class="coin-name" style="display: inline-block;">BTC</h3><br>
+                            <p class="prices">@ $<span id="coin-price"><%= data.buy.btc.amount %></span> per <span class="coin-name">BTC</span></p><br>
+                            <div id="cost">
+                                <h4 class="coin-amt" style="display: inline-block;">0.00</h4> <h4 class="coin-name" style="display: inline-block;">BTC</h4> = 
+                                <h4 id="coin-cost" class="cost" style="display: inline-block">$0</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Portfolio -->
+
+    <!-- Bought -->
+
+    <% if(user.coin.eth.length > 0 || user.coin.btc.length > 0 || user.coin.bch.length > 0 || user.coin.ltc.length > 0 || user.coin.etc.length > 0) { %>
+        <div class="container">
+            <h2>Bought</h2>
+            <div class="row">
+                <div class="col-md-12 tables">
+                    <table class="table table-striped">
+                        <thead>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Value</th>
+                            <th scope="col">Current Sell Value</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">Profit/Loss</th>
+                            <th class="profit-loss-perc" scope="col">Profit/Loss %</th>
+                            <th scope="col">Sell</th>
+                        </thead>
+                        <tbody>
+                            <% if(user.coin.btc.length > 0) { %>
+                                <% for(var i = 0; i < user.coin.btc.length; i++) { %>
+                                    <tr>
+                                        <td><%= user.coin.btc[i].amt %> BTC</td>
+                                        <td>$<%= user.coin.btc[i].price %></td>
+                                        <td>$<%= data.sell.btc.amount %></td>
+                                        <td>$<%= user.coin.btc[i].total.toFixed(2) %></td>
+                                        <td><%= (user.coin.btc[i].time).toLocaleDateString('en-US', {day: 'numeric', month: 'short', year: '2-digit', hour: 'numeric', minute: 'numeric'}) %></td>
+                                        <% var profit = (data.sell.btc.amount * user.coin.btc[i].amt) - (user.coin.btc[i].price * user.coin.btc[i].amt) %>
+                                        <% if((data.sell.btc.amount - user.coin.btc[i].price) >= 0) { %>
+                                            <td><span style="color: green;">+$<%= profit.toFixed(2) %></span></td>
+                                            <td><span style="color: green;">+<%= (profit / (data.sell.btc.amount * user.coin.btc[i].amt) * 100).toFixed(2) %>%</span></td>
+                                        <% } else { %>
+                                            <td><span style="color: red;">-$<%= Math.abs(profit).toFixed(2) %></span></td>
+                                            <td><span style="color: red;"><%= (profit / (data.sell.btc.amount * user.coin.btc[i].amt) * 100).toFixed(2) %>%</span></td>
+                                        <% } %>
+                                        <td><a href="/platform/sell/btc/<%= user.coin.btc[i]._id %>"><button class="btn btn-danger">Sell BTC</button></a></td>
+                                    </tr>
+                                <% } %>
+                            <% } %>
+                            <% if(user.coin.eth.length > 0) { %>
+                                <% for(var i = 0; i < user.coin.eth.length; i++) { %>
+                                    <tr>
+                                        <td><%= user.coin.eth[i].amt %> ETH</td>
+                                        <td>$<%= user.coin.eth[i].price %></td>
+                                        <td>$<%= data.sell.eth.amount %></td>
+                                        <td>$<%= user.coin.eth[i].total.toFixed(2) %></td>
+                                        <td><%= (user.coin.eth[i].time).toLocaleDateString('en-US', {day: 'numeric', month: 'short', year: '2-digit', hour: 'numeric', minute: 'numeric'}) %></td>
+                                        <% var profit = (data.sell.eth.amount * user.coin.eth[i].amt) - (user.coin.eth[i].price * user.coin.eth[i].amt) %>
+                                        <% if((data.sell.eth.amount - user.coin.eth[i].price) >= 0) { %>
+                                            <td><span style="color: green;">+$<%= profit.toFixed(2) %></span></td>
+                                            <td><span style="color: green;">+<%= (profit / (data.sell.eth.amount * user.coin.eth[i].amt) * 100).toFixed(2) %>%</span></td>
+                                        <% } else { %>
+                                            <td><span style="color: red;">-$<%= Math.abs(profit).toFixed(2) %></span></td>
+                                            <td><span style="color: red;"><%= (profit / (data.sell.eth.amount * user.coin.eth[i].amt) * 100).toFixed(2) %>%</span></td>
+                                        <% } %>
+                                        <td><a href="/platform/sell/eth/<%= user.coin.eth[i]._id %>"><button class="btn btn-danger">Sell ETH</button></a></td>
+                                    </tr>
+                                <% } %>
+                            <% } %>
+                            <% if(user.coin.etc.length > 0) { %>
+                                <% for(var i = 0; i < user.coin.etc.length; i++) { %>
+                                    <tr>
+                                        <td><%= user.coin.etc[i].amt %> ETC</td>
+                                        <td>$<%= user.coin.etc[i].price %></td>
+                                        <td>$<%= data.sell.etc.amount %></td>
+                                        <td>$<%= user.coin.etc[i].total.toFixed(2) %></td>
+                                        <td><%= (user.coin.etc[i].time).toLocaleDateString('en-US', {day: 'numeric', month: 'short', year: '2-digit', hour: 'numeric', minute: 'numeric'}) %></td>
+                                        <% var profit = (data.sell.etc.amount * user.coin.etc[i].amt) - (user.coin.etc[i].price * user.coin.etc[i].amt) %>
+                                        <% if((data.sell.etc.amount - user.coin.etc[i].price) >= 0) { %>
+                                            <td><span style="color: green;">+$<%= profit.toFixed(2) %></span></td>
+                                            <td><span style="color: green;">+<%= (profit / (data.sell.etc.amount * user.coin.etc[i].amt) * 100).toFixed(2) %>%</span></td>
+                                        <% } else { %>
+                                            <td><span style="color: red;">-$<%= Math.abs(profit).toFixed(2) %></span></td>
+                                            <td><span style="color: red;"><%= (profit / (data.sell.etc.amount * user.coin.etc[i].amt) * 100).toFixed(2) %>%</span></td>
+                                        <% } %>
+                                        <td><a href="/platform/sell/etc/<%= user.coin.etc[i]._id %>"><button class="btn btn-danger">Sell ETC</button></a></td>
+                                    </tr>
+                                <% } %>
+                            <% } %>
+                            <% if(user.coin.bch.length > 0) { %>
+                                <% for(var i = 0; i < user.coin.bch.length; i++) { %>
+                                    <tr>
+                                        <td><%= user.coin.bch[i].amt %> BCH</td>
+                                        <td>$<%= user.coin.bch[i].price %></td>
+                                        <td>$<%= data.sell.bch.amount %></td>
+                                        <td>$<%= user.coin.bch[i].total.toFixed(2) %></td>
+                                        <td><%= (user.coin.bch[i].time).toLocaleDateString('en-US', {day: 'numeric', month: 'short', year: '2-digit', hour: 'numeric', minute: 'numeric'}) %></td>
+                                        <% var profit = (data.sell.bch.amount * user.coin.bch[i].amt) - (user.coin.bch[i].price * user.coin.bch[i].amt) %>
+                                        <% if((data.sell.bch.amount - user.coin.bch[i].price) >= 0) { %>
+                                            <td><span style="color: green;">+$<%= profit.toFixed(2) %></span></td>
+                                            <td><span style="color: green;">+<%= (profit / (data.sell.bch.amount * user.coin.bch[i].amt) * 100).toFixed(2) %>%</span></td>
+                                        <% } else { %>
+                                            <td><span style="color: red;">-$<%= Math.abs(profit).toFixed(2) %></span></td>
+                                            <td><span style="color: red;"><%= (profit / (data.sell.bch.amount * user.coin.bch[i].amt) * 100).toFixed(2) %>%</span></td>
+                                        <% } %>
+                                        <td><a href="/platform/sell/bch/<%= user.coin.bch[i]._id %>"><button class="btn btn-danger">Sell BCH</button></a></td>
+                                    </tr>
+                                <% } %>
+                            <% } %>
+                            <% if(user.coin.ltc.length > 0) { %>
+                                <% for(var i = 0; i < user.coin.ltc.length; i++) { %>
+                                    <tr>
+                                        <td><%= user.coin.ltc[i].amt %> LTC</td>
+                                        <td>$<%= user.coin.ltc[i].price %></td>
+                                        <td>$<%= data.sell.ltc.amount %></td>
+                                        <td>$<%= user.coin.ltc[i].total.toFixed(2) %></td>
+                                        <td><%= (user.coin.ltc[i].time).toLocaleDateString('en-US', {day: 'numeric', month: 'short', year: '2-digit', hour: 'numeric', minute: 'numeric'}) %></td>
+                                        <% var profit = (data.sell.ltc.amount * user.coin.ltc[i].amt) - (user.coin.ltc[i].price * user.coin.ltc[i].amt) %>
+                                        <% if((data.sell.ltc.amount - user.coin.ltc[i].price) >= 0) { %>
+                                            <td><span style="color: green;">+$<%= profit.toFixed(2) %></span></td>
+                                            <td><span style="color: green;">+<%= (profit / (data.sell.ltc.amount * user.coin.ltc[i].amt) * 100).toFixed(2) %>%</span></td>
+                                        <% } else { %>
+                                            <td><span style="color: red;">-$<%= Math.abs(profit).toFixed(2) %></span></td>
+                                            <td><span style="color: red;"><%= (profit / (data.sell.ltc.amount * user.coin.ltc[i].amt) * 100).toFixed(2) %>%</span></td>
+                                        <% } %>
+                                        <td><a href="/platform/sell/ltc/<%= user.coin.ltc[i]._id %>"><button class="btn btn-danger">Sell LTC </button></a></td>
+                                    </tr>
+                                <% } %>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- End Bought -->
+
+    <!-- Sold -->
+    <% if(user.sold.eth.length > 0 || user.sold.btc.length > 0 || user.sold.bch.length > 0 || user.sold.ltc.length > 0) { %>
+        <div class="container">
+            <h2>Sold</h2>
+            <div class="row">
+                <div class="col-md-12 tables">
+                    <table class="table table-striped">
+                        <thead>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Purchase Value</th>
+                            <th scope="col">Sell Value</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">Profit/Loss</th>
+                            <th class="profit-loss-perc" scope="col">Profit/Loss %</th>
+                        </thead>
+                        <tbody>
+                            <% if(user.sold.btc.length > 0) { %>
+                                <% for(var i = 0; i < user.sold.btc.length; i++) { %>
+                                    <tr>
+                                        <td><%= user.sold.btc[i].amt %> BTC</td>
+                                        <td>$<%= user.sold.btc[i].purchasePrice %></td>
+                                        <td>$<%= user.sold.btc[i].price %></td>
+                                        <td>$<%= user.sold.btc[i].total.toFixed(2) %></td>
+                                        <td><%= (user.sold.btc[i].time).toLocaleDateString('en-US', {day: 'numeric', month: 'short', year: '2-digit', hour: 'numeric', minute: 'numeric'}) %></td>
+                                        <% var profit = (user.sold.btc[i].price * user.sold.btc[i].amt) - (user.sold.btc[i].purchasePrice * user.sold.btc[i].amt) %>
+                                        <% if((user.sold.btc[i].price - user.sold.btc[i].purchasePrice) >= 0) { %>
+                                            <td><span style="color: green;">+$<%= profit.toFixed(2) %></span></td>
+                                            <td><span style="color: green;">+<%= (profit / (user.sold.btc[i].price * user.sold.btc[i].amt) * 100).toFixed(2) %>%</span></td>
+                                        <% } else { %>
+                                            <td><span style="color: red;">-$<%= Math.abs(profit).toFixed(2) %></span></td>
+                                            <td><span style="color: red;"><%= (profit / (user.sold.btc[i].price * user.sold.btc[i].amt) * 100).toFixed(2) %>%</span></td>
+                                        <% } %>
+                                    </tr>
+                                <% } %>
+                            <% } %>
+                            <% if(user.sold.eth.length > 0) { %>
+                                <% for(var i = 0; i < user.sold.eth.length; i++) { %>
+                                    <tr>
+                                        <td><%= user.sold.eth[i].amt %> ETH</td>
+                                        <td>$<%= user.sold.eth[i].purchasePrice %></td>
+                                        <td>$<%= user.sold.eth[i].price %></td>
+                                        <td>$<%= user.sold.eth[i].total.toFixed(2) %></td>
+                                        <td><%= (user.sold.eth[i].time).toLocaleDateString('en-US', {day: 'numeric', month: 'short', year: '2-digit', hour: 'numeric', minute: 'numeric'}) %></td>
+                                        <% var profit = (user.sold.eth[i].price * user.sold.eth[i].amt) - (user.sold.eth[i].purchasePrice * user.sold.eth[i].amt) %>
+                                        <% if((user.sold.eth[i].price - user.sold.eth[i].purchasePrice) >= 0) { %>
+                                            <td><span style="color: green;">+$<%= profit.toFixed(2) %></span></td>
+                                            <td><span style="color: green;">+<%= (profit / (user.sold.eth[i].price * user.sold.eth[i].amt) * 100).toFixed(2) %>%</span></td>
+                                        <% } else { %>
+                                            <td><span style="color: red;">-$<%= Math.abs(profit).toFixed(2) %></span></td>
+                                            <td><span style="color: red;"><%= (profit / (user.sold.eth[i].price * user.sold.eth[i].amt) * 100).toFixed(2) %>%</span></td>
+                                        <% } %>
+                                    </tr>
+                                <% } %>
+                            <% } %>
+                            <% if(user.sold.etc.length > 0) { %>
+                                <% for(var i = 0; i < user.sold.etc.length; i++) { %>
+                                    <tr>
+                                        <td><%= user.sold.etc[i].amt %> ETH</td>
+                                        <td>$<%= user.sold.etc[i].purchasePrice %></td>
+                                        <td>$<%= user.sold.etc[i].price %></td>
+                                        <td>$<%= user.sold.etc[i].total.toFixed(2) %></td>
+                                        <td><%= (user.sold.etc[i].time).toLocaleDateString('en-US', {day: 'numeric', month: 'short', year: '2-digit', hour: 'numeric', minute: 'numeric'}) %></td>
+                                        <% var profit = (user.sold.etc[i].price * user.sold.etc[i].amt) - (user.sold.etc[i].purchasePrice * user.sold.etc[i].amt) %>
+                                        <% if((user.sold.etc[i].price - user.sold.etc[i].purchasePrice) >= 0) { %>
+                                            <td><span style="color: green;">+$<%= profit.toFixed(2) %></span></td>
+                                            <td><span style="color: green;">+<%= (profit / (user.sold.etc[i].price * user.sold.etc[i].amt) * 100).toFixed(2) %>%</span></td>
+                                        <% } else { %>
+                                            <td><span style="color: red;">-$<%= Math.abs(profit).toFixed(2) %></span></td>
+                                            <td><span style="color: red;"><%= (profit / (user.sold.etc[i].price * user.sold.etc[i].amt) * 100).toFixed(2) %>%</span></td>
+                                        <% } %>
+                                    </tr>
+                                <% } %>
+                            <% } %>
+                            <% if(user.sold.bch.length > 0) { %>
+                                <% for(var i = 0; i < user.sold.bch.length; i++) { %>
+                                    <tr>
+                                        <td><%= user.sold.bch[i].amt %> BCH</td>
+                                        <td>$<%= user.sold.bch[i].purchasePrice %></td>
+                                        <td>$<%= user.sold.bch[i].price %></td>
+                                        <td>$<%= user.sold.bch[i].total.toFixed(2) %></td>
+                                        <td><%= (user.sold.bch[i].time).toLocaleDateString('en-US', {day: 'numeric', month: 'short', year: '2-digit', hour: 'numeric', minute: 'numeric'}) %></td>
+                                        <% var profit = (user.sold.bch[i].price * user.sold.bch[i].amt) - (user.sold.bch[i].purchasePrice * user.sold.bch[i].amt) %>
+                                        <% if((user.sold.bch[i].price - user.sold.bch[i].purchasePrice) >= 0) { %>
+                                            <td><span style="color: green;">+$<%= profit.toFixed(2) %></span></td>
+                                            <td><span style="color: green;">+<%= (profit / (user.sold.bch[i].price * user.sold.bch[i].amt) * 100).toFixed(2) %>%</span></td>
+                                        <% } else { %>
+                                            <td><span style="color: red;">-$<%= Math.abs(profit).toFixed(2) %></span></td>
+                                            <td><span style="color: red;"><%= (profit / (user.sold.bch[i].price * user.sold.bch[i].amt) * 100).toFixed(2) %>%</span></td>
+                                        <% } %>
+                                    </tr>
+                                <% } %>
+                            <% } %>
+                            <% if(user.sold.ltc.length > 0) { %>
+                                <% for(var i = 0; i < user.sold.ltc.length; i++) { %>
+                                    <tr>
+                                        <td><%= user.sold.ltc[i].amt %> LTC</td>
+                                        <td>$<%= user.sold.ltc[i].purchasePrice %></td>
+                                        <td>$<%= user.sold.ltc[i].price %></td>
+                                        <td>$<%= user.sold.ltc[i].total.toFixed(2) %></td>
+                                        <td><%= (user.sold.ltc[i].time).toLocaleDateString('en-US', {day: 'numeric', month: 'short', year: '2-digit', hour: 'numeric', minute: 'numeric'}) %></td>
+                                        <% var profit = (user.sold.ltc[i].price * user.sold.ltc[i].amt) - (user.sold.ltc[i].purchasePrice * user.sold.ltc[i].amt) %>
+                                        <% if((user.sold.ltc[i].price - user.sold.ltc[i].purchasePrice) >= 0) { %>
+                                            <td><span style="color: green;">+$<%= profit.toFixed(2) %></span></td>
+                                            <td><span style="color: green;">+<%= (profit / (user.sold.ltc[i].price * user.sold.ltc[i].amt) * 100).toFixed(2) %>%</span></td>
+                                        <% } else { %>
+                                            <td><span style="color: red;">-$<%= Math.abs(profit).toFixed(2) %></span></td>
+                                            <td><span style="color: red;"><%= (profit / (user.sold.ltc[i].price * user.sold.ltc[i].amt) * 100).toFixed(2) %>%</span></td>
+                                        <% } %>
+                                    </tr>
+                                <% } %>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    <% } %>
+
+    <!--====== Javascripts & Jquery ======-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="js/main.js"></script>
+    <script src="js/platform.js"></script>
+
+</body>
+</html>

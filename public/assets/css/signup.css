@@ -1,0 +1,58 @@
+/* Header Section */
+
+#signup-header-section {
+    background-image: url("../img/page-info-bg.jpg");
+    background-size: contain;
+    background-position: right center;
+    background-repeat: no-repeat;
+    background-color: #f3f7f9;
+	padding-bottom: 25px;
+}
+
+.header-section {
+    padding-top: 14px;
+}
+
+
+.site-logo img {
+    width: 125px;
+}
+
+/* Signup Section */
+
+#signup-section {
+    margin-top: 175px;
+    text-align: center;
+}
+
+#signup-row {
+    /* width: 80%; */
+    margin-top: 40px;
+}
+
+.signup-forms {
+    margin-top: 15px;
+}
+
+.form-control {
+    width: 60%;
+    margin: 0 auto;
+    outline: none !important;
+    border: 1px solid transparent !important;
+    border-radius: 0;
+    border-bottom: 1px solid black !important;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none !important;
+}
+
+input[type='text']:focus {
+    outline: none !important;
+    box-shadow: none;
+    border-bottom: 1px solid black;
+    opacity: 0.65;
+}
+
+.text-muted {
+    color: red !important;
+}

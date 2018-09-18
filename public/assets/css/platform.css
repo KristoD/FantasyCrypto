@@ -1,0 +1,133 @@
+/* Header Section */
+
+#signup-header-section {
+    background-image: url("../img/page-info-bg.jpg");
+    background-size: contain;
+    background-position: right center;
+    background-repeat: no-repeat;
+    background-color: #f3f7f9;
+	padding-bottom: 25px;
+}
+
+.header-section {
+    padding-top: 14px;
+    position: static;
+}
+
+
+.site-logo img {
+    width: 125px;
+}
+
+body {
+    background-color: #f3f7f9;
+}
+
+select {
+    width: 200px;
+}
+
+select {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.site-logo img {
+    width: 125px;
+}
+
+.navbar-brand {
+    margin-left: 20px;
+}
+
+.cost {
+    color: red;
+}
+
+#coin-input {
+    width: 40%;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+#user-bar {
+    padding: 15px 50px;
+    border-top: 2px solid #dee2e6;
+    background-color: #fff;
+    border-bottom: 2px solid #dee2e6;
+}
+
+nav p {
+    font-size: 20px;
+}
+
+.tables {
+    padding-left: 0px;
+    overflow: hidden;
+    overflow-y: scroll;
+    height: 257px;
+    margin-bottom: 30px;
+    border: 2px solid #dee2e6;
+}
+
+tr {
+    height: 64px;
+}
+
+.table {
+    max-width: 100%;
+    font-size: 14px;
+}
+
+.coin-sections {
+    background-color: #fff;
+    margin-right: 20px;
+    margin: 0 auto;
+    border: 2px solid #dee2e6;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.coin-subsections {
+    padding: 20px;
+}
+
+.prices {
+    color: #75849a;
+    font-size: 17px;
+    display: inline;
+}
+
+.coin-title {
+    display: inline;
+}
+
+.purchase-buttons {
+    width: 20%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+#cost {
+    margin-top: 150px;
+}
+
+#coin-hero {
+    margin-top: 50px;
+}
+
+.alert-danger {
+    width: 45%;
+    margin: 0 auto;
+}
+
+.container {
+    max-width: 1400px;
+}
+
+input[type='number'] {
+    text-align: center;
+}

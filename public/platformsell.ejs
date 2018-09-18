@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="img/favicon.ico" rel="shortcut icon"/>
+
+	<!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../../css/style.css">
+    <link rel="stylesheet" href="../../../css/platform.css">
+    <title>FantasyCrypto - Platform - Sell</title>
+</head>
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section -->
+    <header id="signup-header-section" class="header-section clearfix">
+        <div class="container-fluid">
+            <a href="/" class="site-logo">
+                <img src="../../../../img/logo_transparent.png">
+            </a>
+            <div class="responsive-bar"><i class="fa fa-bars"></i></div>
+            <a href="" class="user"><i class="fa fa-user"></i></a>
+            <nav class="main-menu">
+                <ul class="menu-list">
+                    <li><a href="/platform">Platform</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- User Info -->
+
+    <div id="user-bar">
+        <nav class="navbar navbar-light">
+            <p>Hello, <%= user.first_name %></p>
+            <p>USD: $<%= (user.usd).toFixed(2) %></p>
+            <% if(user.coin.btc) { %>
+                <% var amount = 0; %>
+                <% var value = 0; %>
+                <% for(var i = 0; i < user.coin.btc.length; i++) { %>
+                    <% amount += user.coin.btc[i].amt; %>
+                    <% value += user.coin.btc[i].total; %>
+                <% } %>
+                <p>BTC: <%= amount %></p>
+                <p>BTC Value: $<%= value.toFixed(2) %></p>
+            <% } %>
+            <% if(user.coin.eth) { %>
+                <% var amount = 0; %>
+                <% var value = 0; %>
+                <% for(var i = 0; i < user.coin.eth.length; i++) { %>
+                    <% amount += user.coin.eth[i].amt; %>
+                    <% value += user.coin.eth[i].total; %>
+                <% } %>
+                <p>ETH: <%= amount %></p>
+                <p>ETH Value: $<%= value.toFixed(2) %></p>
+            <% } %>
+        </nav>
+    </div>
+
+    <!-- Error messages -->
+
+    <% if(sellError) { %>
+        <div class="container">
+            <div class="alert alert-danger alert-dismissible fade show text-center">
+                <%= sellError %>
+                <button type="button" id="popupclose" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- Transaction Info -->
+
+    <div id="coin-hero" class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-3 coin-sections">
+                        <div class="container coin-subsections">
+                            <p>Transaction ID: <%= trans._id %></p>
+                            <p>Purchase Value: $<span id="coin-price"><%= trans.price %></span></p>
+                            <p>Purchase Amount: <span id="coin-amt"><%= trans.amt %></span> <%= coin %></p>
+                            <p>Purchase Total Value: $<%= trans.total.toFixed(2) %></p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 coin-sections">
+                        <div class="container coin-subsections">
+                            <p><%= coin %> Current Sell Value: $<span id="coin-current"><%= data.amount %></span></p>
+                            <% var profit = (data.amount * trans.amt) - (trans.price * trans.amt) %>
+                            <% if((data.amount - trans.price) >= 0) { %>
+                                <p>Profit: <span style="color: green;">+$<%= profit.toFixed(2) %></span></p>
+                                <p>Profit %: <span style="color: green;">+<%= (profit / (trans.price * trans.amt) * 100).toFixed(2) %>%</span></p>
+                            <% } else { %>
+                                <p>Loss: <span style="color: red;">-$<%= Math.abs(profit).toFixed(2) %></span></p>
+                                <p>Loss %: <span style="color: red;"><%= (profit / (trans.price * trans.amt) * 100).toFixed(2) %>%</span></p>
+                            <% } %>
+                            <p>Current Total Value: $<%= (data.amount * trans.amt).toFixed(2) %></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sell Coins -->
+
+                <div class="row">
+                    <div class="col-md-4 coin-sections">
+                        <div class="container coin-subsections">
+                            <h3>Sell <%= data.base %></h3>
+                            <h3 style="margin-top: 25px;">Amount</h3>
+                            <form method="POST" action="/sellcoin/<%= trans._id %>/<%= coin %>">
+                                <div class="form-group">
+                                    <input id="coin-input" type="number" name="amount" class="form-control" step="0.000001">
+                                </div>
+                                <input type="hidden" name="price" value="<%= data.amount %>">
+                                <button type="submit" class="btn btn-primary purchase-buttons">Sell</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-md-4 coin-sections">
+                        <div class="container coin-subsections text-center">
+                            <h4>SELLING</h4>
+                            <h3 class="coin-amt" style="display: inline-block;">0.00 </h3> <h3 class="coin-name" style="display: inline-block;"><%= data.base %></h3><br>
+                            <p class="prices">@ $<span id="coin-price"><%= data.amount %></span> per <span class="coin-name"><%= data.base %></span></p><br>
+                            <div id="cost">
+                                <h4 class="coin-amt" style="display: inline-block;">0.00</h4> <h4 class="coin-name" style="display: inline-block;"><%= data.base %></h4> = 
+                                <h4 id="coin-cost" class="cost" style="display: inline-block">$0</h4>
+                                <h5 id="total-profit">Return: $0</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--====== Javascripts & Jquery ======-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="../../../js/main.js"></script>
+    <script src="../../../js/platformsell.js"></script>
+
+</body>
+</html>

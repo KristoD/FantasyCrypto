@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="img/favicon.ico" rel="shortcut icon"/>
+
+	<!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="css/signup.css">
+    <title>FantasyCrypto - Sign Up</title>
+</head>
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section -->
+    <header id="signup-header-section" class="header-section clearfix">
+		<div class="container-fluid">
+			<a href="/" class="site-logo">
+				<img src="img/logo_transparent.png">
+			</a>
+			<div class="responsive-bar"><i class="fa fa-bars"></i></div>
+			<a href="" class="user"><i class="fa fa-user"></i></a>
+			<nav class="main-menu">
+				<ul class="menu-list">
+					<li><a href="/platform">Platform</a></li>
+					<li><a href="/about">About</a></li>
+					<li><a href="/contact">Contact</a></li>
+				</ul>
+			</nav>
+		</div>
+    </header>
+
+    <!-- Signup Section -->
+
+    <div id="signup-section">
+        <div class="container">
+            <h2>Sign Up For Free</h2>
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="signup-row" class="row">
+                            <div class="col-md-6">
+                                <h3>Register</h3>
+                                <form class="signup-forms" action="/register" method="POST">
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" name="first_name" placeholder="First Name">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" name="last_name" placeholder="Last Name">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" type="email" name="email" placeholder="Email Address">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" type="password" name="password" placeholder="Password">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" type="password" name="confirm_password" placeholder="Confirm Password">
+                                        <% if(register) { %>
+                                            <small class="form-text text-muted"><%= register %></small>
+                                        <% } %>
+                                    </div>
+                                    <button class="btn btn-primary" type="submit">Register</button>
+                                </form>
+                            </div>
+                            <div class="col-md-6">
+                                <h3>Login</h3>
+                                <form class="signup-forms" action="/login" method="POST">
+                                    <div class="form-group">
+                                        <input class="form-control" type="email" name="email" placeholder="Email Address">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" type="password" name="password" placeholder="Password">
+                                        <% if(login) { %>
+                                            <small class="form-text text-muted"><%= login %></small>
+                                        <% } %>
+                                    </div>
+                                    <button class="btn btn-primary" type="submit">Login</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--====== Javascripts & Jquery ======-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
