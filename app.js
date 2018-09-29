@@ -19,7 +19,7 @@ mongoose.Promise = global.Promise;
 
 app.set('views', __dirname + '/public');
 app.set('view engine', 'ejs');
-app.use(express.static(path.join(__dirname + '/public/assets')));
+app.use(express.static(__dirname + '/public/assets'));
 app.use(session(
     {
         secret: 'ADlOclXcnmwvX',
